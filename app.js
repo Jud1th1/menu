@@ -71,20 +71,38 @@ const menu = [
       img: "./images/item-9.jpeg",
       desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
     },
+    {
+      id: 10,
+      title: "steak dinner",
+      category: "dinner",
+      price: 39.99,
+      img: "./images/item-10.jpeg",
+      desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+    },
   ];//How to display items on the screen (learn this before moving on to AJAX)
 
 //select section center (the parent of all the single items)
 const sectionCenter = document.querySelector(".section-center");
 //look for buttons
-const filterBtns = document.querySelectorAll(".filter-btn");
-
+const container = document.querySelector(".btn-container");
 
 //load items
 window.addEventListener("DOMContentLoaded", function(){
   displayMenuItems(menu) //using this as an argument to pass through menu since we use an array in function below
-});
 
-//filter items
+  //2. Once we load items we can start setting up functionality
+  const categories = menu.reduce(function(values, item){
+      if(!values.includes(item.category)){
+        values.push(item.category);
+      }
+    return values; //we need to ALWAYS return a value when we use reduce
+  }, ["all"]) //adding a string of all because it is not an item of the array for our filter
+  const categoryBtns = categories.map(function(category){ 
+    return `<button class="filter-btn" type="button" data-id=${category}>${category}</button>`
+  }).join("");
+  container.innerHTML = categoryBtns;
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  //filter items
 filterBtns.forEach(function(btn){
   btn.addEventListener("click", function(e){
     //console.log(e.currentTarget.dataset); //dataset property will return/reference the object in our console - this needs to match the data categories we have the js items list
@@ -105,7 +123,13 @@ filterBtns.forEach(function(btn){
     }
   });
 });
+}); 
 
+//1.Challenge- make the buttons dynamic in the event of changes that the filter needs to adjust to (comment out buttons in html)
+//2. get only unique categories 
+//3. iterate over categories return buttons
+//4. make sure to select buttons when they are available 
+//5. We moved the filter button inside of the dynamic code because they are no longer in the html we can only access them once they have been loaded by our dynamic code
 
 //Setting up the functionality above into a functinon so we don't repeat when filtering items then we will call it above
 function displayMenuItems(menuItems){
